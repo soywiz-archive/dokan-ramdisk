@@ -41,14 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dokan\DokanNet.cs" />
+    <Compile Include="Dokan\DokanOperations.cs" />
+    <Compile Include="Dokan\Proxy.cs" />
+    <Compile Include="Dokan\ProxyStream.cs" />
+    <Compile Include="Dokan\SliceStream.cs" />
+    <Compile Include="Dokan\UncloseableStream.cs" />
+    <Compile Include="Dokan\Wildcard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DokanNet.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

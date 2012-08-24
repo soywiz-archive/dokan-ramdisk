@@ -39,7 +39,7 @@ namespace Dokan
         public Proxy.FlushFileBuffersDelegate FlushFileBuffers;
         public Proxy.GetFileInformationDelegate GetFileInformation;
         public Proxy.FindFilesDelegate FindFiles;
-        public IntPtr FindFilesWithPattern; // this is not used in DokanNet
+		public Proxy.FindFilesWithPatternDelegate FindFilesWithPattern;
         public Proxy.SetFileAttributesDelegate SetFileAttributes;
         public Proxy.SetFileTimeDelegate SetFileTime;
         public Proxy.DeleteFileDelegate DeleteFile;
@@ -125,7 +125,7 @@ namespace Dokan
         private const uint DOKAN_OPTION_NETWORK = 16;
         private const uint DOKAN_OPTION_REMOVABLE = 32;
 
-        public static int DokanMain(DokanOptions options, DokanOperations operations)
+        public static int DokanMain(DokanOptions options, DokanFileSystem operations)
         {
             if (options.VolumeLabel == null)
             {
@@ -160,7 +160,8 @@ namespace Dokan
             dokanOperations.WriteFile = proxy.WriteFileProxy;
             dokanOperations.FlushFileBuffers = proxy.FlushFileBuffersProxy;
             dokanOperations.GetFileInformation = proxy.GetFileInformationProxy;
-            dokanOperations.FindFiles = proxy.FindFilesProxy;
+			dokanOperations.FindFiles = null;
+			dokanOperations.FindFilesWithPattern = proxy.FindFilesWithPatternProxy;
             dokanOperations.SetFileAttributes = proxy.SetFileAttributesProxy;
             dokanOperations.SetFileTime = proxy.SetFileTimeProxy;
             dokanOperations.DeleteFile = proxy.DeleteFileProxy;

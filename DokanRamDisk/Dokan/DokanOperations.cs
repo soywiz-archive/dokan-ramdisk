@@ -50,113 +50,54 @@ namespace Dokan
          */
     }
 
-    public interface DokanOperations
+	public interface IDokanFile
+	{
+		Stream Stream { get; }
+	}
+
+    abstract public class DokanFileSystem
     {
-        int CreateFile(
-                string filename,
-                FileAccess access,
-                FileShare share,
-                FileMode mode,
-                FileOptions options,
-                DokanFileInfo info);
 
-        int OpenDirectory(
-                string filename,
-                DokanFileInfo info);
+		protected void Log(string Format, params object[] Params)
+		{
+#if DEBUG
+			//Console.WriteLine(Format, Params);
+#endif
+		}
 
-        int CreateDirectory(
-                string filename,
-                DokanFileInfo info);
+		protected void Log2(string Format, params object[] Params)
+		{
+#if DEBUG
+			Console.WriteLine(Format, Params);
+#endif
+		}
 
-        int Cleanup(
-                string filename,
-                DokanFileInfo info);
-
-        int CloseFile(
-                string filename,
-                DokanFileInfo info);
-
-        int ReadFile(
-                string filename,
-                byte[] buffer,
-                ref uint readBytes,
-                long offset,
-                DokanFileInfo info);
-
-        int WriteFile(
-                string filename,
-                byte[] buffer,
-                ref uint writtenBytes,
-                long offset,
-                DokanFileInfo info);
-
-        int FlushFileBuffers(
-                string filename,
-                DokanFileInfo info);
-
-        int GetFileInformation(
-                string filename,
-                FileInformation fileinfo,
-                DokanFileInfo info);
-
-		IEnumerable<FileInformation> FindFiles(string filename, DokanFileInfo info);
-
-        int SetFileAttributes(
-                string filename,
-                FileAttributes attr,
-                DokanFileInfo info);
-
-        int SetFileTime(
-                string filename,
-                DateTime ctime,
-                DateTime atime,
-                DateTime mtime,
-                DokanFileInfo info);
-
-        int DeleteFile(
-                string filename,
-                DokanFileInfo info);
-
-        int DeleteDirectory(
-                string filename,
-                DokanFileInfo info);
-
-        int MoveFile(
-                string filename,
-                string newname,
-                bool replace,
-                DokanFileInfo info);
-
-        int SetEndOfFile(
-                string filename,
-                long length,
-                DokanFileInfo info);
-
-        int SetAllocationSize(
-                string filename,
-                long length,
-                DokanFileInfo info);
-
-        int LockFile(
-                string filename,
-                long offset,
-                long length,
-                DokanFileInfo info);
-
-        int UnlockFile(
-                string filename,
-                long offset,
-                long length,
-                DokanFileInfo info);
-
-        int GetDiskFreeSpace(
-                ref ulong freeBytesAvailable,
-                ref ulong totalBytes,
-                ref ulong totalFreeBytes,
-                DokanFileInfo info);
-
-        int Unmount(
-                DokanFileInfo info);
-
+        abstract public IDokanFile CreateFile(string filename, FileAccess access, FileShare share, FileMode mode, FileOptions options);
+		abstract public void OpenDirectory(string filename, DokanFileInfo info);
+		abstract public void CreateDirectory(string filename, DokanFileInfo info);
+		abstract public void Cleanup(string filename, DokanFileInfo info);
+		//abstract public int CloseFile(string filename, DokanFileInfo info);
+		//abstract public int ReadFile(string filename, byte[] buffer, ref uint readBytes, long offset, DokanFileInfo info);
+		//abstract public int WriteFile(string filename, byte[] buffer, ref uint writtenBytes, long offset, DokanFileInfo info);
+		//abstract public int FlushFileBuffers(string filename, DokanFileInfo info);
+		abstract public FileInformation GetFileInformation(string filename, DokanFileInfo info);
+		abstract public IEnumerable<FileInformation> FindFilesWithPattern(string filename, Wildcard searchPattern, DokanFileInfo info);
+		abstract public void SetFileAttributes(string filename, FileAttributes attr, DokanFileInfo info);
+		abstract public void SetFileTime(string filename, DateTime ctime, DateTime atime, DateTime mtime, DokanFileInfo info);
+		abstract public void DeleteFile(string filename, DokanFileInfo info);
+		abstract public void DeleteDirectory(string filename, DokanFileInfo info);
+		abstract public void MoveFile(string filename, string newname, bool replace, DokanFileInfo info);
+		abstract public void SetEndOfFile(string filename, long length, DokanFileInfo info);
+		abstract public void SetAllocationSize(string filename, long length, DokanFileInfo info);
+		virtual public void LockFile(string filename, long offset, long length, DokanFileInfo info)
+		{
+			Log("LockFile: {0}", filename);
+		}
+		virtual public void UnlockFile(string filename, long offset, long length, DokanFileInfo info)
+		{
+			Log("UnlockFile: {0}", filename);
+		}
+		abstract public void GetDiskFreeSpace(ref ulong freeBytesAvailable, ref ulong totalBytes, ref ulong totalFreeBytes, DokanFileInfo info);
+		abstract public void Unmount(DokanFileInfo info);
     }
 }
